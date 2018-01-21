@@ -1,10 +1,11 @@
-#include "../include/apue.h"
+// #include "../include/apue.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <stdlib.h>
+#define N 5
 
 int total = 0;
-int N = 5;
 int count1 = 0;
 int count2 = 0;
 pthread_mutex_t mutex;
@@ -23,9 +24,11 @@ int main(int argc, char const *argv[]){
     pthread_mutex_init(&mutex, NULL);
 
     while(scanf("%d", &num) == 1){
-        if(num == N){
+        int *p = malloc(sizeof(int));
+        *p = num;
+        if (*p == N){
             count1 ++;
-            pthread_create(&tid, NULL, tfn, (void *)&N);
+            pthread_create(&tid, NULL, tfn, (void *)p);
         }
     }
     while(1)
@@ -33,7 +36,7 @@ int main(int argc, char const *argv[]){
             pthread_mutex_unlock(&mutex);
             break;
         }
-    //printf("Total %d\n", total);
+    printf("Total %d\n", total);
     pthread_mutex_destroy(&mutex);
     return 0;
 }
